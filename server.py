@@ -10,7 +10,7 @@ win32gui.ShowWindow(the_program_to_hide , win32con.SW_HIDE)
 app = Flask(__name__)
 CORS(app, origins=["chrome-extension://*"]) 
 
-CLIENT_ID = "1346156506818543727" #Create an application at the Discord Developer Portal, copy its client id and paste it into here.
+CLIENT_ID = "YOUR_CLIENT_ID_HERE" #Create an application at the Discord Developer Portal, copy its client id and paste it into here.
 
 try:
     rpc = Presence(CLIENT_ID)
@@ -29,15 +29,18 @@ def update_presence():
     title = data.get("title")
     artist = data.get("artist")
     times = data.get("times")
-
-    minutes, seconds = map(int, times.split(":"))
+    bin, time_values = times.split("\n")
+    minutes, seconds = map(int, time_values.split(":"))
     total_seconds = minutes * 60 + seconds
     current_time = time.time()
     ttime = current_time - total_seconds
+    bin, name = title.split(": ")
+    songtitle = name.split("\n")
+    bin, song = songtitle
     try:
         rpc.update(
             state=f"{artist}",
-            details=title,
+            details=song,
             large_image="sc_logo",
             large_text="Soundcloud",
             start=ttime
